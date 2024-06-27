@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const cookieParser = require("cookie-parser");
+const path = require('path');
 
 const dotenv = require('dotenv')
 dotenv.config();
@@ -14,6 +15,11 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+app.get("/",async(req,res)=>{
+    res.send("Welcome to my server")
+})
 
 app.use('/api/auth', require('./routes/authRoute'));
 app.use('/api/file', require('./routes/fileRoute'));

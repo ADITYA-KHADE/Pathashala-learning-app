@@ -1,6 +1,6 @@
 const User = require("../models/UserModel");
 const authTokenGenerate = require("../security/generateToken");
-const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcryptjs");
 
 const signup = async (req, res) => {
   try {
@@ -16,15 +16,16 @@ const signup = async (req, res) => {
     if (password !== confirmpassword) {
       return res.status(400).json({ message: "Password does not match" });
     }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // const salt = await bcrypt.genSalt(10);
+    // const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new User({
       name,
       email,
-      password: hashedPassword,
+      password,
       role,
       subject,
+      totalpoints:0,
     });
 
     await newUser.save();

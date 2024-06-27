@@ -42,19 +42,25 @@ const createFile = async (req, res) => {
     if (!file) {
       return res.status(400).json({ message: "File is required" });
     }
+    
+    const fileSizeInBytes = file.size;
+    const fileSizeInMB = (fileSizeInBytes / (1024 * 1024)).toFixed(2);
 
     const newFile = new File({
       name,
       subject,
       file: `/uploads/projects/${file.filename}`,
+      size:fileSizeInMB,
     });
 
     await newFile.save();
 
     res.status(200).json({
+      id:newFile._id,
       name: name,
       subject: subject,
       file: `/uploads/projects/${file.filename}`,
+      size:fileSizeInMB,
     });
   } catch (error) {
     res.status(400).json({ message: error.message });

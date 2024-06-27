@@ -31,6 +31,7 @@ const fileschema= new mongoose.Schema({
     },
     checkedby:{
         type:String,
+        default:""
     },
     marks:{
         type:Number,
