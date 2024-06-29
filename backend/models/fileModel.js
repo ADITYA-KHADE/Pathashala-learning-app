@@ -24,6 +24,10 @@ const fileschema= new mongoose.Schema({
     },
     sender:{
         type:String,
+        required:true,
+    },
+    senderid:{
+        type:String,
     },
     status:{
         type:Boolean,

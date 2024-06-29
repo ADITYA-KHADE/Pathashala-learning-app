@@ -34,6 +34,7 @@ const signup = async (req, res) => {
       res.status(201).json({
         _id: newUser._id,
         name: newUser.name,
+        email: newUser.email,
         message: "registered successfully",
       });
     } else {
@@ -48,9 +49,9 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.find({ email : email });
     if (!user) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(400).json({ message: "User dnot found" });
     }
 
     if (user.password !== password) {

@@ -30,7 +30,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
-  limits: { fileSize: 1024 * 1024 * 5 }, // Limit file size to 5MB
+  limits: { fileSize: 1024 * 1024 * 15 }, // Limit file size to 15MB
 });
 
 const uploadFile = upload.single("file");
@@ -51,6 +51,8 @@ const createFile = async (req, res) => {
       subject,
       file: `/uploads/projects/${file.filename}`,
       size:fileSizeInMB,
+      senderid:req.user._id,
+      sender:req.user.name,
     });
 
     await newFile.save();
@@ -61,6 +63,8 @@ const createFile = async (req, res) => {
       subject: subject,
       file: `/uploads/projects/${file.filename}`,
       size:fileSizeInMB,
+      senderid:req.user._id,
+      sender:req.user.name,
     });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -78,4 +82,31 @@ const getFile = async (req, res) => {
   }
 };
 
-module.exports = { uploadFile, createFile, getFile };
+const getPending = async (req, res) => {
+  try {
+    if(req.user.role==="Teacher"){
+      const files = await File.find({ status: false, subject:req.user.subject });
+      res.status(200).json(files);
+    }else{
+      const files = await File.find({ status: false , senderid:req.user._id });
+      res.status(200).json(files);
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+    console.log(error.message, "getpending");
+  }
+};
+
+
+const getCompleted =async (req,res) => {
+  try{
+    const files = await File.find({ status: true , senderid:req.user._id });
+    res.status(200).json(files);
+  }catch (error) {
+    res.status(400).json({ message: error.message });
+    console.log(error.message, "getcompleted");
+  }
+};
+
+
+module.exports = { uploadFile, createFile, getFile ,getPending, getCompleted };
