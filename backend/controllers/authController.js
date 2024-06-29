@@ -1,6 +1,5 @@
 const User = require("../models/UserModel");
 const authTokenGenerate = require("../security/generateToken");
-// const bcrypt = require("bcryptjs");
 
 const signup = async (req, res) => {
   try {
@@ -16,8 +15,6 @@ const signup = async (req, res) => {
     if (password !== confirmpassword) {
       return res.status(400).json({ message: "Password does not match" });
     }
-    // const salt = await bcrypt.genSalt(10);
-    // const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new User({
       name,
@@ -49,10 +46,13 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.find({ email : email });
+    const user = await User.find({ email});
     if (!user) {
-      return res.status(400).json({ message: "User dnot found" });
+      return res.status(400).json({ message: "User not found" });
     }
+    console.log(email,password)
+    console.log(user);
+    console.log(user.password)
 
     if (user.password !== password) {
       return res.status(400).json({ message: "Invalid credentials" });
@@ -68,6 +68,7 @@ const login = async (req, res) => {
     console.log(error.message,"login");
   }
 };
+
 
 const logout = async (req, res) => {
   try {
