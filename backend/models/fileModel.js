@@ -37,6 +37,10 @@ const fileschema= new mongoose.Schema({
         type:String,
         default:""
     },
+    checkedbyid:{
+        type:String,
+        default:""
+    },
     marks:{
         type:Number,
         default:0,

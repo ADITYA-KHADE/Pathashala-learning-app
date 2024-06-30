@@ -3,8 +3,7 @@ const authTokenGenerate = require("../security/generateToken");
 
 const signup = async (req, res) => {
   try {
-    const { name, email, password, confirmpassword, role, subject } =
-      req.body;
+    const { name, email, password, confirmpassword, role, subject } = req.body;
 
     const user = await User.findOne({ email });
 
@@ -22,7 +21,7 @@ const signup = async (req, res) => {
       password,
       role,
       subject,
-      totalpoints:0,
+      totalpoints: 0,
     });
 
     await newUser.save();
@@ -39,43 +38,44 @@ const signup = async (req, res) => {
     }
   } catch (error) {
     res.status(500).send(error.message);
-    console.log(error.message,"signup");
+    console.log(error.message, "signup");
   }
 };
 
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.find({ email});
+    console.log(email, password);
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
-    console.log(email,password)
-    console.log(user);
-    console.log(user.password)
 
     if (user.password !== password) {
-      return res.status(400).json({ message: "Invalid credentials" });
+
+      return res
+        .status(400)
+        .json({ message: "Invalid credentials" });
     }
     authTokenGenerate(user._id, res);
     res.status(200).json({
       _id: user._id,
       name: user.name,
       message: "logged in successfully",
+      role:user.role,
     });
   } catch (error) {
     res.status(500).send(error.message);
-    console.log(error.message,"login");
+    console.log(error.message, "login");
   }
 };
-
 
 const logout = async (req, res) => {
   try {
     res.clearCookie("_id");
     res.status(200).json({ message: "logged out successfully" });
   } catch (error) {
-    res.status(500).send(error.message,"logout");
+    res.status(500).send(error.message, "logout");
   }
 };
 

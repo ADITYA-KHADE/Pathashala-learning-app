@@ -3,6 +3,7 @@ const app = express()
 const cors = require('cors')
 const cookieParser = require("cookie-parser");
 const path = require('path');
+const checkToken=require('./middleware/checkToken')
 
 const dotenv = require('dotenv')
 dotenv.config();
@@ -22,7 +23,7 @@ app.get("/",async(req,res)=>{
 })
 
 app.use('/api/auth', require('./routes/authRoute'));
-app.use('/api/file', require('./routes/fileRoute'));
+app.use('/api/file',checkToken, require('./routes/fileRoute'));
 
 app.listen(PORT, () => {
     console.log(`Server is Listening on http://localhost:${PORT}`)
