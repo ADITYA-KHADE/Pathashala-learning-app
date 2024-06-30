@@ -41,6 +41,10 @@ const fileschema= new mongoose.Schema({
         type:String,
         default:""
     },
+    coin:{
+        type:Number,
+        default:0,
+    },
     marks:{
         type:Number,
         default:0,

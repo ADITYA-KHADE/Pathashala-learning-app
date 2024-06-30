@@ -63,6 +63,7 @@ const login = async (req, res) => {
       name: user.name,
       message: "logged in successfully",
       role:user.role,
+      coin:user.totalpoints,
     });
   } catch (error) {
     res.status(500).send(error.message);
@@ -79,8 +80,22 @@ const logout = async (req, res) => {
   }
 };
 
+const updateCoin = async (req, res) => {
+  try {
+    const { coin } = req.body;
+    const user = await User.findById(req.params.id);
+    user.totalpoints = coin;
+    await user.save();
+    res.status(200).json({ message: "Coin updated successfully" });
+  } catch (error) {
+    res.status(500).send(error.message);
+    console.log(error.message, "updatecoin");
+  }
+};
+
 module.exports = {
   signup,
   login,
   logout,
+  updateCoin,
 };

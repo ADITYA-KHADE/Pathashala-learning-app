@@ -1,14 +1,14 @@
-import React from 'react'
-import Login from "./pages/Login"
-import Signup from "./pages/Signup"
-import { Toaster } from 'react-hot-toast';
-import { Routes, Route , Navigate} from "react-router-dom";
-import Navbar from "./components/Navbar"
-import {useAuthContext} from "./contexts/AuthContext"
-import Home from "./pages/Home"
-
+import React from "react";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import { Toaster } from "react-hot-toast";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import { useAuthContext } from "./contexts/AuthContext";
+import Home from "./pages/Home";
+import File from "./pages/File";
 const App = () => {
-  const {authUser} = useAuthContext();
+  const { authUser } = useAuthContext();
   return (
     <div>
       <Routes>
@@ -24,10 +24,14 @@ const App = () => {
           path="/signup"
           element={authUser ? <Navigate to="/" /> : <Signup />}
         />
+        <Route
+          path="/file/:id"
+          element={authUser ? <File /> : <Navigate to="/login" />}
+        />
       </Routes>
       <Toaster />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

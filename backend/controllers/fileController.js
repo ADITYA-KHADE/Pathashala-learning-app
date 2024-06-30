@@ -67,6 +67,7 @@ const createFile = async (req, res) => {
       sender: req.user.name,
       checkedby: newFile.checkedby,
       checkedbyid: newFile.checkedbyid,
+      coin: newFile.coin,
     });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -89,7 +90,7 @@ const getPending = async (req, res) => {
     const { limit, offset } = req.body;
     let totalFiles;
     let files;
-    
+
     if (req.user.role === "Teacher") {
       files = await File.find({ status: false, subject: req.user.subject })
         .skip(offset)
@@ -119,23 +120,91 @@ const getPending = async (req, res) => {
   }
 };
 
-
 const getCompleted = async (req, res) => {
   try {
+    const { limit, offset } = req.body;
+    let totalFiles;
+    let files;
+
     if (req.user.role === "Teacher") {
-      const files = await File.find({
+      files = await File.find({ status: true, checkedbyid: req.user._id })
+        .skip(offset)
+        .limit(limit);
+      totalFiles = await File.countDocuments({
         status: true,
         checkedbyid: req.user._id,
       });
-      res.status(200).json(files);
     } else {
-      const files = await File.find({ status: true, senderid: req.user._id });
-      res.status(200).json(files);
+      files = await File.find({ status: true, senderid: req.user._id })
+        .skip(offset)
+        .limit(limit);
+      totalFiles = await File.countDocuments({
+        status: true,
+        senderid: req.user._id,
+      });
     }
+
+    if (!files) {
+      return res.status(400).json({ files: [], totalFiles: 0 });
+    }
+
+    res.status(200).json({ files, totalFiles });
   } catch (error) {
     res.status(400).json({ message: error.message });
-    console.log(error.message, "getcompleted");
+    console.error(error.message, "getcompleted");
   }
 };
 
-module.exports = { uploadFile, createFile, getFile, getPending, getCompleted };
+const updateFileMarks = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { marks,hoursAgo } = req.body;
+
+    const file = await File.findById(id);
+
+    if (!file) {
+      return res.status(404).json({ message: 'File not found' });
+    }
+
+    if (hoursAgo <=0) {
+      file.coin=5;
+    }else{
+      file.coin=10;
+    }
+    file.marks = marks;
+    file.status = true;
+    file.checkedby = req.user.name;
+    file.checkedbyid = req.user._id;
+    await file.save();
+
+    res.status(200).json({ message: 'Marks updated successfully', file });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.error(error.message, 'updateFileMarks');
+  }
+};
+
+const allCompleted = async (req, res) => {
+  try {
+    let totalFiles;
+    let files;
+
+    if (req.user.role === "Teacher") {
+      files = await File.find({ status: true,checkedbyid:req.user._id })
+      totalFiles = await File.countDocuments({
+        status: true,checkedbyid:req.user._id 
+      });
+    } 
+
+    if (!files) {
+      return res.status(400).json({ files: [], totalFiles: 0 });
+    }
+
+    res.status(200).json({ files, totalFiles });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+    console.error(error.message, "allgetcompleted");
+  }
+};
+
+module.exports = { uploadFile, createFile, getFile, getPending, getCompleted,updateFileMarks,allCompleted };

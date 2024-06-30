@@ -41,6 +41,12 @@ const Navbar = () => {
     }
   };
 
+  useEffect(() => {
+    if (authUser.role === "Teacher") {
+      setCoins(authUser.coin);
+    }
+  }, [value,authUser]);
+
   return (
     <header className={`bg-white text-black sticky top-0 z-50 px-2 py-2`}>
       <nav
@@ -182,7 +188,7 @@ const Navbar = () => {
                 <Link
                   key="History"
                   onClick={() => {
-                    setValue("History");
+                    setValue("history");
                   }}
                   className={`cursor-pointer block rounded-lg px-3 py-2 text-base font-semibold leading-7
                     ${

@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import { useFieldContext } from "../contexts/FieldContext";
 import Pending from "../components/Query/Pending";
 import Completed from "../components/Query/Completed";
-import History from "../components/Query/HistoryCoin";
+import HistoryCoin from "../components/Query/HistoryCoin";
 import Upload from "../components/Query/Upload"
 
 const Home = () => {
@@ -15,8 +15,8 @@ const Home = () => {
       <Navbar />
       {value === "completed" && <Completed />}
       {value === "pending" && <Pending />}
-      {value === "history" && <History />}
-      {value === "Upload" && <Upload />}
+      {value === "history" && <HistoryCoin />}
+      {value === "upload" && <Upload />}
       <Footer />
     </div>
   );
