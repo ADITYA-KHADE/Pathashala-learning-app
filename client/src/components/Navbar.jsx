@@ -121,16 +121,17 @@ const Navbar = () => {
             className="p-2 cursor-pointer"
             onClick={() => {
               logoutall();
+              setValue("pending")
             }}
           >
             {" "}
             logout{" "}
           </h1>
           {authUser.role === "teacher" && (
-            <div className="flex rounded-xl p-2 border-solid border-2 border-black">
+            <div className="flex rounded-xl p-2 font-poppins font-semibold border-solid border-2 border-black">
               TotalCoins
               <img src={Coin} alt="coin" className="h-5 w-5" />
-              <span className="text-sm font-semibold">{coins}</span>
+              <span className="text-base font-semibold">{coins}</span>
             </div>
           )}
         </div>

@@ -28,7 +28,7 @@ const FileData = ({ file }) => {
   const hoursAgo = 10 - calculateHoursDifference(file.createdAt);
   const [marks, setMarks] = useState("");
   const navigate = useNavigate();
-  const { setAuthUser,authUser } = useAuthContext();
+  const { setAuthUser, authUser } = useAuthContext();
 
   const submit = async (e) => {
     e.preventDefault();
@@ -38,13 +38,16 @@ const FileData = ({ file }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ marks, hoursAgo,userid:authUser._id }),
+        body: JSON.stringify({ marks, hoursAgo, userid: authUser._id }),
       });
 
       const data = await response.json();
       if (response.ok) {
         toast.success("Marks updated successfully");
-        setAuthUser((prevUser) => ({ ...prevUser, totalpoints: data.totalpoints }));
+        setAuthUser((prevUser) => ({
+          ...prevUser,
+          totalpoints: data.totalpoints,
+        }));
         navigate("/");
       } else {
         console.error("Failed to update marks", data);
@@ -58,51 +61,72 @@ const FileData = ({ file }) => {
   return (
     <div className="flex flex-col sm:flex-row min-h-full gap-3 sm:gap-1 flex-1 justify-center sm:justify-between px-2 py-3 lg:px-5">
       <div className="bg-slate-600 p-1 sm:w-1/2 shadow-lg">
-        <object
-          data="http://localhost:8000/uploads/projects/file_1719740226665.pdf"
+        <embed
+          src={`http://192.168.155.251:8000${file.file}`}
           type="application/pdf"
           width="100%"
           height="550"
           className="border-2 border-gray-200 h-60 sm:h-full rounded-lg"
-        >
-          <p>This browser doesn't support PDFs. Please download the file.</p>
-        </object>
+        />
       </div>
       <div className="flow-root sm:w-1/2 bg-slate-100 p-1 sm:p-6 font-poppins text-gray-800 shadow-inner">
-        <h1 className="text-center font-semibold sm:text-4xl text-2xl p-2">Details here</h1>
+        <h1 className="text-center font-semibold sm:text-4xl text-2xl p-2">
+          Details here
+        </h1>
         <dl className="divide-y divide-gray-500 text-base">
           <div className="grid grid-cols-1 gap-1 py-3 sm:text-center sm:grid-cols-3">
             <dt className="font-medium text-2xl text-gray-900">Title :</dt>
-            <dd className="text-gray-700 text-2xl sm:col-span-1">{file.name}</dd>
+            <dd className="text-gray-700 text-2xl sm:col-span-1">
+              {file.name}
+            </dd>
           </div>
 
           <div className="grid grid-cols-1 gap-1 py-3 sm:text-center sm:grid-cols-3">
             <dt className="font-medium text-2xl text-gray-900">Subject :</dt>
-            <dd className="text-gray-700 text-2xl sm:col-span-1">{file.subject}</dd>
+            <dd className="text-gray-700 text-2xl sm:col-span-1">
+              {file.subject}
+            </dd>
           </div>
 
           <div className="grid grid-cols-1 gap-1 py-3 sm:text-center sm:grid-cols-3">
-            <dt className="font-medium text-2xl text-gray-900">Description :</dt>
+            <dt className="font-medium text-2xl text-gray-900">
+              Description :
+            </dt>
             <dd className="text-gray-700 text-sm sm:col-span-2">
-              Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+              Lorem Ipsum has been the industry's standard dummy text ever since
+              the 1500s, when an unknown printer took a galley of type and
+              scrambled it to make a type specimen book. It has survived not
+              only five centuries, but also the leap into electronic
+              typesetting, remaining essentially unchanged. It was popularised
+              in the 1960s with the release of Letraset sheets containing Lorem
+              Ipsum passages, and more recently with desktop publishing software
+              like Aldus PageMaker including versions of Lorem Ipsum.
             </dd>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:justify-between py-3">
             <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
-              <dt className="font-medium text-xl text-gray-900">Uploaded by :</dt>
+              <dt className="font-medium text-xl text-gray-900">
+                Uploaded by :
+              </dt>
               <dd className="text-gray-800 text-xl text-left">{file.sender}</dd>
             </div>
             <div className="grid grid-cols-1 gap-1 sm:text-center sm:grid-cols-2">
-              <dt className="font-medium text-xl text-gray-900">Verified by :</dt>
-              <dd className="text-gray-800 text-xl">{file.checkedby || "N/A"}</dd>
+              <dt className="font-medium text-xl text-gray-900">
+                Verified by :
+              </dt>
+              <dd className="text-gray-800 text-xl">
+                {file.checkedby || "N/A"}
+              </dd>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:justify-between py-3">
             <div className="grid grid-cols-1 gap-1 sm:text-center sm:grid-cols-2">
               <dt className="font-medium text-xl text-gray-900">Status :</dt>
-              <dd className="text-gray-800 text-xl text-left">{file.status ? "Verified" : "Pending"}</dd>
+              <dd className="text-gray-800 text-xl text-left">
+                {file.status ? "Verified" : "Pending"}
+              </dd>
             </div>
             <div className="grid grid-cols-1 gap-1 sm:text-center sm:grid-cols-2">
               <dt className="font-medium text-xl text-gray-900">Marks :</dt>
@@ -112,16 +136,24 @@ const FileData = ({ file }) => {
 
           <div className="flex justify-between py-3">
             <div className="grid grid-cols-1 gap-1 py-2 sm:text-center">
-              <dt className="font-medium text-xl text-gray-900">Created At :</dt>
-              <dd className="text-gray-800 text-xl sm:col-span-2">{formatDate(file.createdAt)}</dd>
+              <dt className="font-medium text-xl text-gray-900">
+                Created At :
+              </dt>
+              <dd className="text-gray-800 text-xl sm:col-span-2">
+                {formatDate(file.createdAt)}
+              </dd>
             </div>
 
             <div className="grid grid-cols-1 gap-1 py-2 sm:text-center">
-              <dt className="font-medium text-xl text-gray-900">Updated At :</dt>
-              <dd className="text-gray-800 text-xl sm:col-span-2">{formatDate(file.updatedAt)}</dd>
+              <dt className="font-medium text-xl text-gray-900">
+                Updated At :
+              </dt>
+              <dd className="text-gray-800 text-xl sm:col-span-2">
+                {formatDate(file.updatedAt)}
+              </dd>
             </div>
           </div>
-          {!file.checkedby && (
+          {authUser.role == "teacher" && (
             <>
               <div className="p-4 font-poppins">
                 <div>
@@ -142,12 +174,14 @@ const FileData = ({ file }) => {
                 </div>
                 {hoursAgo <= 0 && (
                   <h1 className="flex p-1">
-                    Get <img src={Coin} alt="" className="h-6 w-6 p-1" /> 5 coins after verification
+                    Get <img src={Coin} alt="" className="h-6 w-6 p-1" /> 5
+                    coins after verification
                   </h1>
                 )}
                 {hoursAgo > 0 && (
                   <h1 className="flex p-1">
-                    Submit it within next {hoursAgo} hours to get <img src={Coin} alt="" className="h-6 w-6 p-1" /> 10 coins.
+                    Submit it within next {hoursAgo} hours to get{" "}
+                    <img src={Coin} alt="" className="h-6 w-6 p-1" /> 10 coins.
                   </h1>
                 )}
               </div>
