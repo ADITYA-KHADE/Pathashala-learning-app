@@ -25,6 +25,12 @@ app.get("/",async(req,res)=>{
 app.use('/api/auth', require('./routes/authRoute'));
 app.use('/api/file',checkToken, require('./routes/fileRoute'));
 
+app.use(express.static(path.join(__dirname, "../client", "dist")));
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client", "dist", "index.html"));
+});
+
 app.listen(PORT, () => {
     console.log(`Server is Listening on http://localhost:${PORT}`)
 })
