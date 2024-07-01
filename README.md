@@ -1,0 +1,1 @@
+Get verification in pdf documents for various subjects like Math, Science, English ,etc from experience faculties of prestigious institutes. In upcoming time , students also get 1-1 doubt solving real-time like features in our platform .
