@@ -203,6 +203,7 @@ const Navbar = () => {
                   key="upload"
                   onClick={() => {
                     setValue("upload");
+                    setMobileMenuOpen(false);
                   }}
                   className={`cursor-pointer block rounded-lg px-3 py-2 text-base font-semibold leading-7
                   ${
