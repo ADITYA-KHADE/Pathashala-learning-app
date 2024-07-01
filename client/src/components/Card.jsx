@@ -63,7 +63,7 @@ const Card = (props) => {
             <p className="hidden sm:block sm:text-xs sm:text-gray-500">
               Posted by
               <span className="font-medium underline hover:text-gray-700">
-                {authUser.role === "Teacher"
+                {authUser.role === "teacher"
                   ? props.file.sender
                   : authUser.name}
               </span>

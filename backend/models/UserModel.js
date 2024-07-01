@@ -16,7 +16,7 @@ const UserModelSchema = new mongoose.Schema({
     },
     role:{
         type: String,
-        default: "Student",
+        default: "student",
     },
     subject:{
         type: String,

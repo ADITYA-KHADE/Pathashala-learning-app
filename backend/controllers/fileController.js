@@ -2,6 +2,8 @@ const File = require("../models/fileModel");
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
+const User = require("../models/UserModel");
+const mongoose = require("mongoose")
 
 const uploadsDir = path.join(__dirname, "../uploads", "projects");
 if (!fs.existsSync(uploadsDir)) {
@@ -91,7 +93,7 @@ const getPending = async (req, res) => {
     let totalFiles;
     let files;
 
-    if (req.user.role === "Teacher") {
+    if (req.user.role === "teacher") {
       files = await File.find({ status: false, subject: req.user.subject })
         .skip(offset)
         .limit(limit);
@@ -126,7 +128,7 @@ const getCompleted = async (req, res) => {
     let totalFiles;
     let files;
 
-    if (req.user.role === "Teacher") {
+    if (req.user.role === "teacher") {
       files = await File.find({ status: true, checkedbyid: req.user._id })
         .skip(offset)
         .limit(limit);
@@ -158,38 +160,70 @@ const getCompleted = async (req, res) => {
 const updateFileMarks = async (req, res) => {
   try {
     const { id } = req.params;
-    const { marks,hoursAgo } = req.body;
+    const { marks, hoursAgo,userid } = req.body;
+
+    // Ensure user is authenticated
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
 
     const file = await File.findById(id);
+    const user = await User.findById(userid);
 
     if (!file) {
       return res.status(404).json({ message: 'File not found' });
     }
 
-    if (hoursAgo <=0) {
-      file.coin=5;
-    }else{
-      file.coin=10;
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-    file.marks = marks;
-    file.status = true;
-    file.checkedby = req.user.name;
-    file.checkedbyid = req.user._id;
-    await file.save();
 
-    res.status(200).json({ message: 'Marks updated successfully', file });
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      if (hoursAgo <= 0) {
+        file.coin = 5;
+        user.totalpoints += 5;
+      } else {
+        file.coin = 10;
+        user.totalpoints += 10;
+      }
+
+      file.marks = marks;
+      file.status = true;
+      file.checkedby = req.user.name;
+      file.checkedbyid = req.user._id;
+
+      await file.save({ session });
+      await user.save({ session });
+
+      await session.commitTransaction();
+      session.endSession();
+
+      res.status(200).json({
+        message: 'Marks updated successfully',
+        file,
+        totalpoints: user.totalpoints,
+      });
+    } catch (error) {
+      await session.abortTransaction();
+      session.endSession();
+      throw error;
+    }
   } catch (error) {
     res.status(500).json({ message: error.message });
     console.error(error.message, 'updateFileMarks');
   }
 };
 
+
 const allCompleted = async (req, res) => {
   try {
     let totalFiles;
     let files;
 
-    if (req.user.role === "Teacher") {
+    if (req.user.role === "teacher") {
       files = await File.find({ status: true,checkedbyid:req.user._id })
       totalFiles = await File.countDocuments({
         status: true,checkedbyid:req.user._id 

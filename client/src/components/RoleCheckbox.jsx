@@ -2,24 +2,24 @@ const RoleCheckbox = ({ onCheckboxChange, selectedRole }) => {
 	return (
 		<div className='flex'>
 			<div className='form-control'>
-				<label className={`label gap-2 cursor-pointer ${selectedRole === "Student" ? "selected" : ""} `}>
+				<label className={`label gap-2 cursor-pointer ${selectedRole === "student" ? "selected" : ""} `}>
 					<span className='label-text'>Student</span>
 					<input
 						type='checkbox'
 						className='checkbox border-slate-900'
-						checked={selectedRole === "Student"}
-						onChange={() => onCheckboxChange("Student")}
+						checked={selectedRole === "student"}
+						onChange={() => onCheckboxChange("student")}
 					/>
 				</label>
 			</div>
 			<div className='form-control'>
-				<label className={`label gap-2 cursor-pointer  ${selectedRole === "Teacher" ? "selected" : ""}`}>
+				<label className={`label gap-2 cursor-pointer  ${selectedRole === "teacher" ? "selected" : ""}`}>
 					<span className='label-text'>Teacher</span>
 					<input
 						type='checkbox'
 						className='checkbox border-slate-900'
-						checked={selectedRole === "Teacher"}
-						onChange={() => onCheckboxChange("Teacher")}
+						checked={selectedRole === "teacher"}
+						onChange={() => onCheckboxChange("teacher")}
 					/>
 				</label>
 			</div>

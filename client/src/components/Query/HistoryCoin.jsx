@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useFieldContext } from "../../contexts/FieldContext";
 import { useAuthContext } from "../../contexts/AuthContext";
 import { toast } from "react-hot-toast";
-import Coin from "../../assets/coin.ico"
+import Coin from "../../assets/coin.ico";
 
 // CustomCard component
 
@@ -11,10 +11,13 @@ const CustomCard = ({ file }) => {
   return (
     <div className="border text-gray-800 bg-slate-100 font-poppins rounded-lg shadow-lg p-4 flex justify-between">
       <div className="">
-      <h3 className="text-lg font-semibold">Name : {file.name}</h3>
-      <p className="text-sm">upload by : {file.sender}</p>
+        <h3 className="text-lg font-semibold">Name : {file.name}</h3>
+        <p className="text-sm">upload by : {file.sender}</p>
       </div>
-      <h3 className="flex">+<img src={Coin} alt="" className="h-7 w-8 p-1"/>{file.coin}</h3>
+      <h3 className="flex">
+        +<img src={Coin} alt="" className="h-7 w-8 p-1" />
+        {file.coin}
+      </h3>
     </div>
   );
 };
@@ -23,8 +26,7 @@ const HistoryCoin = () => {
   const [files, setFiles] = useState([]);
   const [totalFiles, setTotalFiles] = useState(0);
   const { value } = useFieldContext();
-  const { authUser,setAuthUser } = useAuthContext();
-  let totalcoin=0;
+  const { authUser, setAuthUser } = useAuthContext();
 
   const coin = async () => {
     try {
@@ -43,39 +45,9 @@ const HistoryCoin = () => {
     }
   };
 
-  const updateuser = async () => {
-    try {
-      const res = await fetch(`/api/auth/update-coin/${authUser._id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ coin: totalcoin }),
-      });
-      const data = await res.json();
-      if (res.status === 200) {
-        // toast.success("Coin updated successfully");
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  
-  }
-
   useEffect(() => {
     coin();
-  }, [value]);
-
-  useEffect(() => {
-    totalcoin = files.reduce((sum, file) => sum + file.coin, 0);
-    setAuthUser((prevUser) => ({ ...prevUser, coin: totalcoin }));
-  }, [files, setAuthUser]);
-
- useEffect(() => {
-  updateuser();
- }, []);
+  }, [value,authUser]);
 
   return (
     <div className="h-1/3">

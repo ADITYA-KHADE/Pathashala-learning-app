@@ -8,12 +8,6 @@ import { useAuthContext } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
-const navigation = [
-  { name: "All", href: "#Intro" },
-  { name: "pending", href: "#About" },
-  { name: "Completed", href: "#Education" },
-];
-
 const Navbar = () => {
   const { authUser, setAuthUser } = useAuthContext();
   const { value, setValue } = useFieldContext();
@@ -42,10 +36,10 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    if (authUser.role === "Teacher") {
-      setCoins(authUser.coin);
+    if (authUser.role === "teacher") {
+      setCoins(authUser.totalpoints);
     }
-  }, [value,authUser]);
+  }, [value, authUser]);
 
   return (
     <header className={`bg-white text-black sticky top-0 z-50 px-2 py-2`}>
@@ -94,7 +88,7 @@ const Navbar = () => {
           >
             completed
           </Link>
-          {authUser.role === "Teacher" ? (
+          {authUser.role === "teacher" ? (
             <Link
               key="History"
               onClick={() => {
@@ -124,6 +118,7 @@ const Navbar = () => {
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center">
           <h1
+            className="p-2 cursor-pointer"
             onClick={() => {
               logoutall();
             }}
@@ -131,7 +126,7 @@ const Navbar = () => {
             {" "}
             logout{" "}
           </h1>
-          {authUser.role === "Teacher" && (
+          {authUser.role === "teacher" && (
             <div className="flex rounded-xl p-2 border-solid border-2 border-black">
               TotalCoins
               <img src={Coin} alt="coin" className="h-5 w-5" />
@@ -164,7 +159,10 @@ const Navbar = () => {
             <div className="space-y-2">
               <Link
                 key="pending"
-                to="/pending"
+                onClick={() => {
+                  setValue("pending");
+                  setMobileMenuOpen(false);
+                }}
                 className={`cursor-pointer block rounded-lg px-3 py-2 text-base font-semibold leading-7
                    ${
                      value === "pending" ? "text-blue-500" : ""
@@ -176,6 +174,7 @@ const Navbar = () => {
                 key="completed"
                 onClick={() => {
                   setValue("completed");
+                  setMobileMenuOpen(false)
                 }}
                 className={`cursor-pointer block rounded-lg px-3 py-2 text-base font-semibold leading-7
                   ${
@@ -184,11 +183,12 @@ const Navbar = () => {
               >
                 completed
               </Link>
-              {authUser.role === "Teacher" && (
+              {authUser.role === "teacher" ? (
                 <Link
                   key="History"
                   onClick={() => {
                     setValue("history");
+                    setMobileMenuOpen(false)
                   }}
                   className={`cursor-pointer block rounded-lg px-3 py-2 text-base font-semibold leading-7
                     ${
@@ -197,11 +197,25 @@ const Navbar = () => {
                 >
                   History
                 </Link>
+              ) : (
+                <Link
+                  key="upload"
+                  onClick={() => {
+                    setValue("upload");
+                  }}
+                  className={`cursor-pointer block rounded-lg px-3 py-2 text-base font-semibold leading-7
+                  ${
+                    value === "pending" ? "text-blue-500" : ""
+                  } hover:text-blue-500`}
+                >
+                  upload
+                </Link>
               )}
               <h1
                 key="logout"
                 onClick={() => {
                   logoutall();
+                  setValue("pending");
                 }}
                 className={`cursor-pointer block rounded-lg px-3 py-2 text-base font-semibold leading-7
                   ${
