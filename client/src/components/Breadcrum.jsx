@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFieldContext } from "../contexts/FieldContext";
+import {Link} from "react-router-dom"
 
 const Breadcrum = ({ file }) => {
   const { value,setValue } = useFieldContext();
@@ -8,7 +9,7 @@ const Breadcrum = ({ file }) => {
     <div className="breadcrumbs sm:text-base text-xs text-white bg-blue-500">
       <ul>
         <li>
-          <a href="/" >
+          <Link to="/" >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -23,10 +24,16 @@ const Breadcrum = ({ file }) => {
               ></path>
             </svg>
             Home
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/">
+          <Link to="/" onClick={()=>{
+            if(value=="completed"){
+              setValue("completed")
+            }else{
+              setValue("pending")
+            }
+          }}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -41,7 +48,7 @@ const Breadcrum = ({ file }) => {
               ></path>
             </svg>
             {value}
-          </a>
+          </Link>
         </li>
         <li>
           <span className="inline-flex items-center gap-2">

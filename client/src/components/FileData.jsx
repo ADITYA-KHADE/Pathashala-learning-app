@@ -25,6 +25,7 @@ const calculateHoursDifference = (date) => {
 };
 
 const FileData = ({ file }) => {
+  const Server_Url = import.meta.env.VITE_API_SERVER;
   const hoursAgo = 10 - calculateHoursDifference(file.createdAt);
   const [marks, setMarks] = useState("");
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ const FileData = ({ file }) => {
     <div className="flex flex-col sm:flex-row min-h-full gap-3 sm:gap-1 flex-1 justify-center sm:justify-between px-2 py-3 lg:px-5">
       <div className="bg-slate-600 p-1 sm:w-1/2 shadow-lg">
         <embed
-          src={`http://192.168.155.251:8000${file.file}`}
+          src={`${Server_Url}${file.file}`}
           type="application/pdf"
           width="100%"
           height="550"
@@ -71,7 +72,7 @@ const FileData = ({ file }) => {
       </div>
       <div className="flow-root sm:w-1/2 bg-slate-100 p-1 sm:p-6 font-poppins text-gray-800 shadow-inner">
         <h1 className="text-center font-semibold sm:text-4xl text-2xl p-2">
-          Details here
+          Details here :
         </h1>
         <dl className="divide-y divide-gray-500 text-base">
           <div className="grid grid-cols-1 gap-1 py-3 sm:text-center sm:grid-cols-3">
