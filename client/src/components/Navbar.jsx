@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Logo from "../assets/logo.jpg";
@@ -116,9 +116,17 @@ const Navbar = () => {
             </Link>
           )}
         </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center">
-          <h1
-            className="p-2 cursor-pointer"
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-2">
+          
+          {authUser.role === "teacher" && (
+            <div className="flex rounded-xl p-2 font-poppins font-semibold border-solid border-2 border-gray-600 cursor-not-allowed">
+              {/* TotalCoins */}
+              <img src={Coin} alt="coin" className="h-5 w-5" />
+              <span className="text-base font-semibold">{coins}</span>
+            </div>
+          )}
+            <h1 
+            className="p-2 cursor-pointer flex rounded-xl font-poppins font-semibold border-solid border-2 border-gray-500  hover:bg-slate-800 hover:text-white"
             onClick={() => {
               logoutall();
               setValue("pending")
@@ -127,13 +135,6 @@ const Navbar = () => {
             {" "}
             logout{" "}
           </h1>
-          {authUser.role === "teacher" && (
-            <div className="flex rounded-xl p-2 font-poppins font-semibold border-solid border-2 border-black">
-              TotalCoins
-              <img src={Coin} alt="coin" className="h-5 w-5" />
-              <span className="text-base font-semibold">{coins}</span>
-            </div>
-          )}
         </div>
       </nav>
       <Dialog

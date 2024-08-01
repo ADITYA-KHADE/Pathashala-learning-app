@@ -1,3 +1,4 @@
+
 import React from "react";
 import Pdf from "../assets/pdf.png";
 import { Link } from "react-router-dom";
@@ -15,17 +16,28 @@ const calculateHoursDifference = (date) => {
   return diffInHours;
 };
 
+const calculateDaysDifference = (date) => {
+  const now = new Date();
+  const uploadedDate = new Date(date);
+  const diffInMs = now - uploadedDate;
+  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+  return diffInDays;
+};
+
 const Card = (props) => {
   const { authUser } = useAuthContext();
   const { value } = useFieldContext();
   const hoursAgo = calculateHoursDifference(props.file.createdAt);
-  const updatehoursAgo = calculateHoursDifference(props.file.updatedAt);
+  const daysAgo =  calculateDaysDifference(props.file.createdAt);
+  // const updatehoursAgo = calculateHoursDifference(props.file.updatedAt);
   const isVerified = props.file.marks ? true : props.file.status;
+
+  // console.log(hoursAgo,daysAgo);
 
   return (
     <Link
       to={`/file/${props.file._id}`}
-      className="block rounded-xl border-2 border-gray-100 bg-white"
+      className="block rounded-xl border-2 border-gray-100 bg-white transition-transform duration-150 md:hover:scale-105"
     >
       <article className="flex items-start gap-4 p-4 sm:p-6 lg:p-8 font-poppins">
         <img alt="" src={Pdf} className="sm:h-28 w-20 h-20 rounded-lg object-cover" />
@@ -66,11 +78,11 @@ const Card = (props) => {
           </div>
           {value!="completed" ? (
             <p className="text-sm text-gray-500 mt-1">
-            Uploaded {hoursAgo} hours ago
+           {hoursAgo<=24 ? ` Uploaded ${hoursAgo} hours ago` : ` Uploaded ${daysAgo} days ago`}
           </p>
           ):(
             <p className="text-sm text-gray-500 mt-1">
-            verified {updatehoursAgo} hours ago
+            {calculateHoursDifference(props.file.updatedAt)<=24 ? ` Verified ${calculateHoursDifference(props.file.updatedAt)} hours ago` : ` Verified ${calculateDaysDifference(props.file.updatedAt)} days ago`}
           </p>
           )}
         </div>

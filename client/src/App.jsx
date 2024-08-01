@@ -1,10 +1,12 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { useEffect } from "react";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Intro from "./pages/Intro"
 import { Toaster } from "react-hot-toast";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Navbar from "./components/Navbar";
+// import Navbar from "./components/Navbar";
 import { useAuthContext } from "./contexts/AuthContext";
 import Home from "./pages/Home";
 import File from "./pages/File";
@@ -49,6 +51,10 @@ const App = () => {
         <Route
           path="/file/:id"
           element={authUser ? <File /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/intro"
+          element={<Intro/>}
         />
       </Routes>
       <Toaster />
