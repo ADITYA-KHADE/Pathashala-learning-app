@@ -18,17 +18,25 @@ const calculateDaysDifference = (date) => {
   const now = new Date();
   const uploadedDate = new Date(date);
   const diffInMs = now - uploadedDate;
-  const diffInDays =Math.floor(diffInMs / (1000 * 60 * 60 * 24)) % 30;
+  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
   return diffInDays;
 };
 
+
 const CustomCard = ({ file }) => {
+  const hoursAgo = calculateHoursDifference(file.createdAt);
+  const daysAgo =  calculateDaysDifference(file.createdAt);
   return (
     <div className="border text-gray-800 bg-slate-100 font-poppins rounded-lg shadow-lg p-4 flex justify-between">
       <div className="">
         <h3 className="text-lg font-semibold">Name : {file.name}</h3>
         <p className="text-base">upload by : {file.sender}</p>
-        <p className="text-base">Verified at : {calculateDaysDifference(file.updatedAt)} hours ago</p>
+        {hoursAgo<=48 ? (
+          <p className="text-sm">Uploaded {hoursAgo} hours ago</p>
+        ):(
+          <p className="text-sm">Uploaded {daysAgo} days ago</p>
+        )}
+        {/* <p className="text-base">Verified at : {calculateHoursDifference(file.updatedAt)} hours ago</p> */}
       </div>
       <h3 className="flex font-semibold text-xl items-center">
         +<img src={Coin} alt="" className="h-8 w-9 p-1" />

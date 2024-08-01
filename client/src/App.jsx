@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
 import { useEffect } from "react";
 import Login from "./pages/Login";
@@ -10,6 +9,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthContext } from "./contexts/AuthContext";
 import Home from "./pages/Home";
 import File from "./pages/File";
+
+import "./App.css"
 const App = () => {
   const { authUser } = useAuthContext();
   useEffect(() => {
