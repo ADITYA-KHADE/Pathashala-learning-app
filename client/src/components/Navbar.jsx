@@ -42,7 +42,7 @@ const Navbar = () => {
   }, [value, authUser]);
 
   return (
-    <header className={`bg-white text-black sticky top-0 z-50 px-2 py-2`}>
+    <header className={`bg-white text-black sticky top-0 z-50 px-2 py-2 opacity-90 font-poppins`}>
       <nav
         className="container mx-auto px-6 lg:px-8 flex items-center justify-between"
         aria-label="Global"
